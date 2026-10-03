@@ -1,36 +1,40 @@
 # Dojo
 
-**Pet Dojo Training** — Clicker / idle gym: pets hit dummies to raise base stats under a daily cap.
+**Train a little. See the daily cap.**
 
-Part of [ComputerPets](https://github.com/RicheyWorks/computerpets). Map: [computerpets-ecosystem](https://github.com/RicheyWorks/computerpets-ecosystem).
+A planned idle training game where click and idle progress raise pet stats within visible daily limits.
 
-| | |
+**Stage: design scaffold.** This checkout contains a design document and a source placeholder. The experience below is planned; there is no runnable app or integrated service yet.
+
+[Status](#status) · [Planned experience](#planned-experience) · [Contributor quickstart](#contributor-quickstart) · [Game design](docs/DESIGN.md) · [Ecosystem map](https://github.com/RicheyWorks/computerpets-ecosystem)
+
+## Status
+
+| Available today | What you can inspect |
 | --- | --- |
-| Status | Design scaffold — loop and engine frozen |
-| License | MIT |
-| Tokens | Minigames never mint or burn. Tired overlay, not a dead lineage. |
-| First pet | [Meet Rui first](https://github.com/RicheyWorks/computerpets/blob/main/docs/START-HERE.md). This game is optional. |
+| [Game design](docs/DESIGN.md) | Intended behavior, boundaries, and planned dependencies. |
+| [Source placeholder](src/index.ts) | Name metadata only; no package.json, app, or runtime is checked in. |
+| [MIT license](LICENSE) | Licensing terms for the repository. |
 
-## The loop
+Gameplay, endpoints, integration arrows, and failure handling on this page describe implementation targets. No build/test harness, CI workflow, or product screenshots are included in this scaffold.
 
-Without a cap this becomes pay-or-click-forever. Dojo is the honest grind: small, capped, visible on the overlay as 'trained today'. Arena, Siege, Horde all read these numbers.
+## Planned experience
 
-## Who plays
+- Park a pet on a dummy.
+- Click for burst XP, idle for drip.
+- Daily cap per stat (shown).
+- Overcap XP converts to flavor steam, not power.
 
-Every combat game reads these numbers. Daily caps are the point.
-
-## What it is not
-
-An uncapped clicker. Overcap XP is steam, not power. Bots decay.
-
-## Genre and engine
+### Planned technology
 
 - Genre: **Idle clicker**
 - Engine: **Svelte**
 - Stack: Svelte 5 · idle tick · dummy targets · writes into overlay base stats with daily caps
 - Default surface: `5173`
 
-## Architecture
+### Planned connections
+
+These arrows show intended dependencies, rather than working integrations.
 
 ```mermaid
 flowchart LR
@@ -40,72 +44,48 @@ flowchart LR
   overlay -->|sync| dojo
 ```
 
-## How you play
+## Contributor quickstart
 
-1. Park a pet on a dummy.
-2. Click for burst XP, idle for drip.
-3. Daily cap per stat (shown).
-4. Overcap XP converts to flavor steam, not power.
+With access to this private repository, Git and PowerShell are enough to review the scaffold:
 
-## First slice
+```powershell
+git clone https://github.com/RicheyWorks/computerpets-dojo.git
+Set-Location computerpets-dojo
+Get-Content docs/DESIGN.md
+Get-Content src/index.ts
+```
 
-Build this and stop.
+Read [Game design](docs/DESIGN.md) before choosing implementation details. The commands above inspect the checked-in files; app installation, editor launch, and server startup become possible after a buildable project and entry point are added.
+
+### First implementation target
 
 **Park Rui on a dummy, click + idle drip, show remaining cap, write to overlay stats.**
 
 You know it works when: Bot clicks decay. Cap bypass rejected. Overlay offline: queue remaining cap.
 
-## Environment
+Treat this as an acceptance target for a future implementation. Start with the documented slice, add the required project setup and focused tests, and update these instructions with commands that work from a fresh clone.
 
-Node 22
+## Design boundaries
 
-## Failure doctrine
+1. Minigames cannot mint or burn NFTs by themselves (Minter is the write path).
+2. Stats come from lived overlay care + Dojo caps, not cash shop.
+3. Species kits stay inside Lore. Illegal hybrids never spawn.
+4. Fail soft: the desktop overlay process is not this process.
+
+**Required failure behavior:**
 
 Bot clicks → exponential decay. Cap bypass attempt → reject write. Overlay offline → queue the day's remaining cap, apply on sync.
 
-Canon rules that never yield:
+## Ecosystem
 
-- 210 living kinds. No illegal hybrids.
-- Overlay pets can get tired, sick, or hide. Tokens are not burned by a minigame.
-- Desktop walk stays the main quest. Closing Dojo must leave Rui walking.
+- [computerpets](https://github.com/RicheyWorks/computerpets) (base stats)
+- [computerpets-arena](https://github.com/RicheyWorks/computerpets-arena)
+- [computerpets-siege](https://github.com/RicheyWorks/computerpets-siege)
+- [computerpets-horde](https://github.com/RicheyWorks/computerpets-horde)
+- [computerpets-quests](https://github.com/RicheyWorks/computerpets-quests)
 
-## Neighbors
-
-- computerpets (base stats)
-- computerpets-arena
-- computerpets-siege
-- computerpets-horde
-- computerpets-quests
-
-## Layout
-
-```
-computerpets-dojo/
-  README.md
-  LICENSE
-  docs/DESIGN.md
-  src/                implementation lands here
-```
-
-## Run (Windows)
-
-```powershell
-cd app; npm install; npm run dev
-```
-
-Meet Rui first via the [flagship start-here](https://github.com/RicheyWorks/computerpets/blob/main/docs/START-HERE.md). This game is optional.
-
-## Links
-
-- Flagship: [RicheyWorks/computerpets](https://github.com/RicheyWorks/computerpets)
-- This repo: [RicheyWorks/computerpets-dojo](https://github.com/RicheyWorks/computerpets-dojo)
-- Map: [RicheyWorks/computerpets-ecosystem](https://github.com/RicheyWorks/computerpets-ecosystem)
-- Design file: [docs/DESIGN.md](docs/DESIGN.md)
+Start with the [ComputerPets flagship](https://github.com/RicheyWorks/computerpets) for the desktop pet. This repository describes an optional extension; the [ecosystem map](https://github.com/RicheyWorks/computerpets-ecosystem) explains the broader plan.
 
 ## License
 
 MIT. See [LICENSE](LICENSE).
-
----
-
-*Two hundred ten living kinds. Keep them so a line does not go quiet.*
